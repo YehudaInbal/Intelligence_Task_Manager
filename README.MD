@@ -94,6 +94,7 @@ create_tables() | Creates both tables if they do not exist (activated at system 
 |:--    | :--  |
 |create_agent(data) | Creates a new agent and returns the agent object|
 |get_all_agents() | Returns a list of all agents|
+|get_agent_by_id(id)| Returns one agent bu id |
 |update_agent(id, data) | UPDATE for the entire row (cannot change id) |
 |deactivate_agent(id) | Changes agent status to inactive |
 |increment_completed(id) | Updates the number of tasks completed |
