@@ -18,9 +18,9 @@ CREATE TABLE IF NOT EXISTS missions (
     title VARCHAR(50) NOT NULL,
     description TEXT,
     location VARCHAR(50),
-    difficulty INT,
-    importance INT,
-    status VARCHAR(50),
+    difficulty INT CHECK (difficulty >= 1 AND difficulty <= 10),
+    importance INT CHECK (importance >= 1 AND importance <= 10),
+    status VARCHAR(50) DEFAULT 'NEW',
     risk_level VARCHAR(50),
     assigned_agent_id INT DEFAULT NULL
     )"""
@@ -41,6 +41,7 @@ class DB_connection:
     
     @staticmethod
     def create_database():
+        """Returns an active connection to MySQL"""
         conn = None
         try:
             conn = mysql.connector.connect(
