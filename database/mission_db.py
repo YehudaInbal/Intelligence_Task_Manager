@@ -156,15 +156,3 @@ class MissionDB:
     def get_top_agent():
         """Returns the agent with the highest completed_missions"""
         pass
-
-
-# print(MissionDB.count_critical_missions())
-# print(MissionDB.count_open_missions())
-# print(MissionDB.count_by_status('ASSIGNED'))
-# print(MissionDB.count_all_missions())
-# print(MissionDB.get_open_missions_by_agent(2))
-# print(MissionDB.update_mission_status(6, 'CRITICAL'))
-# print(MissionDB.assign_mission(7, 3))
-# print(MissionDB.get_all_missions())
-# data = {'title': 'dto do', 'description':"dooooo", 'location':"evr", 'difficulty': 9, 'importance': 9}
-# print(MissionDB.create_mission(data))

@@ -1,4 +1,4 @@
-from db_connection import DB_connection
+from database.db_connection import DB_connection
 
 
 class AgentDB:
@@ -141,17 +141,3 @@ class AgentDB:
 
 
 
-
-# print(AgentDB.count_active_agents())
-
-# print(AgentDB.get_agent_performance(3))
-
-
-# print(AgentDB.increment_failed(3))
-# print(AgentDB.deactivate_agent(1))
-# print(AgentDB.get_all_agents())
-# data = {'name': 'rexi', 'specialty': 'Bark', 'agent_rank': 'Commander'}
-# data = {'name': 'rexi', 'specialty': 'Bark', 'agent_rank': 'Senior'}
-# data = {'name': 'rexi', 'specialty': 'Bark', 'agent_rank': 'Junior'}
-# print(AgentDB.create_agent(data))
-# print(AgentDB.update_agent(4, data))
