@@ -24,6 +24,8 @@ def get_agent_by_id(id: int):
     
 
 def update_agent(id:int, data: dict):
+    if data.get("id") != None:
+        raise KeyError("Unable to update ID")
     if data.get("agent_rank") not in allowed_ranks and data.get("agent_rank") != None:
         raise ValueError("Invalid rank")
     return AgentDB.update_agent(id, data)

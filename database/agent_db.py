@@ -101,11 +101,10 @@ class AgentDB:
     def increment_failed(id) -> bool:
         """Updates the number of failed tasks"""
         conn = None
-        updated_failed_missions = AgentDB.get_agent_by_id(id)["failed_missions"] + 1
         try:
             conn = DB_connection.get_connection()
             cursor = conn.cursor()
-            cursor.execute("UPDATE agents SET failed_missions = %s WHERE id = %s", (updated_failed_missions, id))
+            cursor.execute("UPDATE agents SET failed_missions = failed_missions + 1 WHERE id = %s", (id,))
             conn.commit()
             return cursor.rowcount > 0
         finally:
@@ -120,24 +119,25 @@ class AgentDB:
         completed = agent["completed_missions"]
         failed = agent["failed_missions"]
         total = completed + failed
-        success_rate = (completed / total) * 100
         return {
             'completed': completed,
             'failed': failed,
             'total': total,
-            'success_rate': success_rate
+            'success_rate': (completed / total) * 100 if total != 0 else 0
         }
     
 
     @staticmethod
     def count_active_agents() -> int:
-        """Returns the number of active agents"""
-        agents = AgentDB.get_all_agents()
-        sum_active = 0
-        for agent in agents:
-            if agent["is_active"] == True:
-                sum_active += 1
-        return sum_active
-
+        conn = None
+        try:
+            conn = DB_connection.get_connection()
+            cursor = conn.cursor()
+            cursor.execute("SELECT COUNT(*) FROM agents WHERE is_active = TRUE")
+            return cursor.fetchone()[0]
+        finally:
+            if conn:
+                cursor.close()
+                conn.close()
 
 

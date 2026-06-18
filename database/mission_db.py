@@ -98,7 +98,16 @@ class MissionDB:
     @staticmethod
     def count_all_missions():
         """Total tasks"""
-        return len(MissionDB.get_all_missions())
+        conn = None
+        try:
+            conn = DB_connection.get_connection()
+            cursor = conn.cursor()
+            cursor.execute("SELECT COUNT(*) FROM missions")
+            return cursor.fetchone()[0]
+        finally:
+            if conn:
+                cursor.close()
+                conn.close()
 
     
     @staticmethod
@@ -119,14 +128,18 @@ class MissionDB:
     @staticmethod
     def count_open_missions():
         """Open task counter"""
-        missions = MissionDB.get_all_missions()
-        open_missions = 0
-        open_status ={'IN_PROGRESS', 'NEW', 'ASSIGNED'}
-        for m in missions:
-            if m['status'] in open_status:
-                open_missions += 1
-        return open_missions
-    
+        conn = None
+        try:
+            conn = DB_connection.get_connection()
+            cursor = conn.cursor()
+            cursor.execute("SELECT COUNT(*) FROM missions WHERE status IN ('IN_PROGRESS', 'NEW', 'ASSIGNED')")
+            return cursor.fetchone()[0]
+        finally:
+            if conn:
+                cursor.close()
+                conn.close()
+
+
     @staticmethod
     def count_critical_missions():
         """"CRITICAL task counter"""
@@ -149,18 +162,16 @@ class MissionDB:
         conn = None
         try:
             conn = DB_connection.get_connection()
-            cursor = conn.cursor(dictionary=True)
+            cursor = conn.cursor()
             cursor.execute("""
-            SELECT
-                assigned_agent_id,
-                COUNT(*) AS completed_count
-            FROM missions
-            WHERE status = 'COMPLETED'
+            SELECT assigned_agent_id AS completed_count
+            FROM missions WHERE status = 'COMPLETED'
             GROUP BY assigned_agent_id
-            ORDER BY completed_count DESC
-            LIMIT 1
+            ORDER BY completed_count 
+            DESC LIMIT 1
             """)
-            return cursor.fetchone()
+            agent_id = cursor.fetchone()[0]
+            return AgentDB.get_agent_by_id(agent_id)
         finally:
             if conn:
                 conn.close()

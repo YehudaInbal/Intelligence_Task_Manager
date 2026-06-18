@@ -31,6 +31,8 @@ def get_agent_by_id(id: int):
 def update_agent(id: int, data: dict):
     try:
         return agent_service.update_agent(id, data)
+    except KeyError as e:
+        raise HTTPException(status_code=422, detail=f"{e}")
     except ValueError as e:
         raise HTTPException(status_code=400, detail=f"{e}")
 
