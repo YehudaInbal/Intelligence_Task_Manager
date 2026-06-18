@@ -43,12 +43,28 @@ def start_mission(id: int):
 
 @router.put("/{id}/complete")
 def complete_mission(id: int):
-    pass
+    try:
+        return mission_service.complete_mission(id)
+    except KeyError as e:
+        raise HTTPException(status_code=404, detail=f"{e}")
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=f"{e}")
+
 
 @router.put("/{id}/fail")
-def faile_mission(id: int):
-    pass
+def failed_mission(id: int):
+    try:
+        return mission_service.failed_mission(id)
+    except KeyError as e:
+        raise HTTPException(status_code=404, detail=f"{e}")
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=f"{e}")
 
 @router.put("/{id}/cancel")
 def cancel_mission(id: int):
-    pass
+    try:
+        return mission_service.cancel_mission(id)
+    except KeyError as e:
+        raise HTTPException(status_code=404, detail=f"{e}")
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=f"{e}")

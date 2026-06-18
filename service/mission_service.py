@@ -44,12 +44,26 @@ def assign_mission(mission_id: int, agent_id: int):
 def start_mission(id: int):
     mission = get_mission_by_id(id)
     if mission.get("status") != "ASSIGNED":
-        raise ValueError("Mission not available")
+        raise ValueError("status is not 'ASSIGNED")
     return MissionDB.update_mission_status(id, "IN_PROGRESS")
 
 def complete_mission(id: int):
     mission = get_mission_by_id(id)
     if mission.get("status") != "IN_PROGRESS":
-        raise ValueError("Mission not available")
-    agent_service.increment_completed()            #לטפל שהID יהיה של הסוכן!
-    return MissionDB.update_mission_status("COMPLETED")
+        raise ValueError("status is not 'IN_PROGRESS'")
+    agent_service.increment_completed(mission.get("assigned_agent_id")) 
+    return MissionDB.update_mission_status(id, "COMPLETED")
+
+
+def failed_mission(id: int):
+    mission = get_mission_by_id(id)
+    if mission.get("status") != "IN_PROGRESS":
+        raise ValueError("status is not 'IN_PROGRESS'")
+    agent_service.increment_failed(mission.get("assigned_agent_id")) 
+    return MissionDB.update_mission_status(id, "FAILED")
+
+def cancel_mission(id: int):
+    mission = get_mission_by_id(id)
+    if mission.get("status") not in {"ASSIGNED", "NEW"}:
+        raise ValueError("status is not one of 'ASSIGNED or 'NEW'") 
+    return MissionDB.update_mission_status(id, "CANCELLED")

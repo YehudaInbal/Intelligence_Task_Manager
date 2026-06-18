@@ -42,3 +42,6 @@ def get_agent_performance(id):
 
 def increment_completed(id):
     return AgentDB.increment_completed(id)
+
+def increment_failed(id):
+    return AgentDB.increment_failed(id)
