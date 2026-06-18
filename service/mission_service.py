@@ -27,11 +27,12 @@ def get_mission_by_id(id):
         raise KeyError("Mission not found")
     return MissionDB.get_mission_by_id(id)
 
+
 def assign_mission(mission_id: int, agent_id: int):
     mission = get_mission_by_id(mission_id)
     agent = agent_service.get_agent_by_id(agent_id)
     if mission.get("status") != 'NEW':
-        raise ValueError("Mission not available")
+        raise ValueError("Mission not available, status must be 'NEW'")
     if not agent.get("is_active"):
         raise ValueError("Agent is not active")
     if len(MissionDB.get_open_missions_by_agent(agent_id)) >= 3:

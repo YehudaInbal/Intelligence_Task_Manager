@@ -170,8 +170,10 @@ class MissionDB:
             ORDER BY completed_count 
             DESC LIMIT 1
             """)
-            agent_id = cursor.fetchone()[0]
-            return AgentDB.get_agent_by_id(agent_id)
+            agent_id = cursor.fetchone()
+            if not agent_id:
+                return None
+            return AgentDB.get_agent_by_id(agent_id[0])
         finally:
             if conn:
                 conn.close()
