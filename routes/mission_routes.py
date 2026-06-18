@@ -1,13 +1,16 @@
 from fastapi import APIRouter, HTTPException
 
 from service import mission_service
+from logger import get_logger
 
+logger = get_logger()
 router = APIRouter()
 
 
 @router.post("", status_code=201)
 def create_mission(data: dict):
     try:
+        logger.info("starting to crate")
         return mission_service.create_mission(data) 
     except KeyError as e:
         raise HTTPException(status_code=400, detail=f"{e}")

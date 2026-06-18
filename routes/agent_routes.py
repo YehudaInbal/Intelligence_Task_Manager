@@ -1,11 +1,15 @@
 from fastapi import APIRouter, HTTPException
 
 from service import agent_service
+from logger import get_logger
+
+logger = get_logger()
 
 router = APIRouter()
 
 @router.post("", status_code=201)
 def create_agent(data: dict):
+    logger.info("starting to crate")
     try:
         return agent_service.create_agent(data)
     except ValueError as e:
@@ -13,8 +17,10 @@ def create_agent(data: dict):
 
 
 
+
 @router.get("")
 def get_all_agents():
+    logger.info("puling students")
     return agent_service.get_all_agents()
 
 
