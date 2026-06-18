@@ -1,5 +1,5 @@
 # Intelligence Task Manager 
-------------------------
+-------------------------
 
 This system manages missions using a mission table and a agents table in a database.
 ----
