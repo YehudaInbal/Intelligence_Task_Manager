@@ -40,3 +40,16 @@ def assign_mission(mission_id: int, agent_id: int):
         raise ValueError("Only Commander can handle critical missions")
     return MissionDB.assign_mission(mission_id, agent_id)
 
+
+def start_mission(id: int):
+    mission = get_mission_by_id(id)
+    if mission.get("status") != "ASSIGNED":
+        raise ValueError("Mission not available")
+    return MissionDB.update_mission_status(id, "IN_PROGRESS")
+
+def complete_mission(id: int):
+    mission = get_mission_by_id(id)
+    if mission.get("status") != "IN_PROGRESS":
+        raise ValueError("Mission not available")
+    agent_service.increment_completed()            #לטפל שהID יהיה של הסוכן!
+    return MissionDB.update_mission_status("COMPLETED")

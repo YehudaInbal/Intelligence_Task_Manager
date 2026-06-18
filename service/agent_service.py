@@ -37,3 +37,8 @@ def deactivate_agent(id: int):
 def get_agent_performance(id):
     get_agent_by_id(id)
     return AgentDB.get_agent_performance(id)
+
+
+
+def increment_completed(id):
+    return AgentDB.increment_completed(id)

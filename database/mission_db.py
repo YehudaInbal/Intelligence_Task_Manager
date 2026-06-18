@@ -8,16 +8,6 @@ class MissionDB:
     def create_mission(data: dict) -> dict:
         """Creates a new task (returns the object)"""
         conn = None
-        risk_level = data["difficulty"] * 2 + data["importance"]
-        if 0 <= risk_level <= 9:
-            risk_level = 'LOW'
-        elif risk_level <= 17:
-            risk_level = 'MEDIUM'
-        elif risk_level <= 24:
-            risk_level = 'HIGH'
-        elif risk_level > 24:
-            risk_level = 'CRITICAL'
-        data["risk_level"] = risk_level
         try:
             conn = DB_connection.get_connection()
             cursor = conn.cursor()
@@ -79,7 +69,7 @@ class MissionDB:
                 conn.close()
         
     @staticmethod
-    def update_mission_status(id, status) -> bool:
+    def update_mission_status(id: int, status: str) -> bool:
         """Used for any status change"""
         conn = None
         try:
@@ -152,7 +142,28 @@ class MissionDB:
                 conn.close()
 
 
+
     @staticmethod
     def get_top_agent():
         """Returns the agent with the highest completed_missions"""
-        pass
+        conn = None
+        try:
+            conn = DB_connection.get_connection()
+            cursor = conn.cursor(dictionary=True)
+            cursor.execute("""
+            SELECT
+                assigned_agent_id,
+                COUNT(*) AS completed_count
+            FROM missions
+            WHERE status = 'COMPLETED'
+            GROUP BY assigned_agent_id
+            ORDER BY completed_count DESC
+            LIMIT 1
+            """)
+            return cursor.fetchone()
+        finally:
+            if conn:
+                conn.close()
+
+
+

@@ -31,6 +31,7 @@ if __name__ == "__main__":
 # from database.agent_db import AgentDB
 # from database.mission_db import MissionDB
 
+# print(MissionDB.get_top_agent())
 
 
 # def create_agent(data):
